@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Weather App</h2>
+    <p class="owner">Aditya Pathak | BTech 2nd Year | SRMU</p>
+
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Check Weather</button>
+
+    <div class="result">
+        <h3 id="cityName"></h3>
+        <p id="temp"></p>
+        <p id="condition"></p>
+        <p id="humidity"></p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+CSS
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #74ebd5, #9face6);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+input {
+    width: 90%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 8px 15px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.result {
+    margin-top: 15px;
+}
+
+.owner {
+    font-size: 12px;
+    color: gray;
+}
+
+JAVA SCRPIT
+async function getWeather() {
+    const city = document.getElementById("city").value;
+
+    if (city === "") {
+        alert("Please enter city name");
+        return;
+    }
+
+    const apiKey = 79108201fed127edfb8451666a5fd574
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === "404") {
+            alert("City not found");
+            return;
+        }
+
+        document.getElementById("cityName").innerText =
+            data.name + ", " + data.sys.country;
+
+        document.getElementById("temp").innerText =
+            "Temperature: " + data.main.temp + " °C";
+
+        document.getElementById("condition").innerText =
+            "Weather: " + data.weather[0].description;
+
+        document.getElementById("humidity").innerText =
+            "Humidity: " + data.main.humidity + "%";
+
+    } catch (error) {
+        alert("Something went wrong");
+    }
+}
